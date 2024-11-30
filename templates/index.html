@@ -57,13 +57,16 @@
         <div class="image-preview-container">
             <div class="preview-box">
                 <h2>Original Image</h2>
-                <div id="originalPreview" class="preview"></div>
+                <div class="preview-wrapper">
+                    <img class="preview" id="originalPreview">
+                </div>
             </div>
-            
             <div class="preview-box">
                 <h2>Squared Image</h2>
-                <div id="squaredPreview" class="preview"></div>
-                <button id="downloadBtn" class="download-btn" style="display: none;">Download Squared Image</button>
+                <div class="preview-wrapper">
+                    <img class="preview" id="squaredPreview">
+                </div>
+                <button class="download-btn" id="downloadBtn" style="display: none;">Download</button>
             </div>
         </div>
 
@@ -140,8 +143,7 @@
             function displayOriginalPreview(file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    originalPreview.style.backgroundImage = `url(${e.target.result})`;
-                    originalPreview.classList.add('has-image');
+                    originalPreview.src = e.target.result;
                 }
                 reader.readAsDataURL(file);
             }
@@ -156,8 +158,7 @@
                 }
 
                 loadingOverlay.style.display = 'flex';
-                squaredPreview.style.backgroundImage = '';
-                squaredPreview.classList.remove('has-image');
+                squaredPreview.src = '';
                 downloadBtn.style.display = 'none';
 
                 const formData = new FormData();
@@ -178,8 +179,8 @@
                     const blob = await response.blob();
                     const url = URL.createObjectURL(blob);
                     
-                    squaredPreview.style.backgroundImage = `url(${url})`;
-                    squaredPreview.classList.add('has-image');
+                    squaredPreview.src = url;
+                    
                     downloadBtn.style.display = 'block';
                     
                     downloadBtn.onclick = () => {
