@@ -15,86 +15,182 @@
 <body>
     <main class="container">
         <h1>Squared <span class="beta">BETA</span></h1>
-        <p class="description">Squared lets you resize an image to an exact square, great for profile pictures</p>
-        <section class="upload-container">
-            <h2 class="visually-hidden">Upload Image</h2>
-            <form id="upload-form" aria-label="Image upload form">
-                <input type="file" id="file-input" accept="image/*" required aria-label="Choose image file">
+        <p class="description">Create perfect square images for social media, profile pictures, and more.</p>
+        
+        <div class="upload-container" id="dropZone">
+            <form id="uploadForm" class="upload-form">
                 <div class="input-group">
-                    <label for="pixel-size">Output Size:</label>
-                    <input type="number" id="pixel-size" placeholder="Square size in pixels" value="300" min="50" max="2000" required aria-label="Set output size in pixels">
-                    <span class="unit">px</span>
+                    <label for="fileInput" class="file-label">
+                        <span id="fileName">Choose File</span>
+                        <input type="file" id="fileInput" accept="image/*" class="file-input">
+                    </label>
+                    
+                    <div class="size-format-group">
+                        <div class="size-input-group">
+                            <label for="pixelSize">Output Size:</label>
+                            <input type="number" id="pixelSize" name="pixel_size" value="300" min="50" max="2000">
+                            <span class="unit">px</span>
+                        </div>
+                        
+                        <div class="format-select-group">
+                            <label for="formatSelect">Format:</label>
+                            <select id="formatSelect" name="format">
+                                <option value="png">PNG</option>
+                                <option value="jpeg">JPEG</option>
+                                <option value="webp">WebP</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="squareBtn" class="square-btn">Square It!</button>
                 </div>
-                <button type="submit">Square It!</button>
             </form>
-        </section>
-        <section class="image-container">
-            <div class="image-box">
-                <h3>Original Image</h3>
-                <img id="original-image" src="" alt="" style="display: none;">
+            
+            <div id="dropMessage" class="drop-message">
+                <p>Drop your image here</p>
             </div>
-            <div class="image-box">
-                <h3>Squared Image</h3>
-                <img id="squared-image" src="" alt="" style="display: none;">
-                <button id="download-btn" style="display: none;" onclick="downloadImage()">Download Squared Image</button>
+        </div>
+
+        <div class="image-preview-container">
+            <div class="preview-box">
+                <h2>Original Image</h2>
+                <div id="originalPreview" class="preview"></div>
             </div>
-        </section>
-        <footer class="footer">
-            <p>developed by <a href="https://www.codebotiks.com" target="_blank" rel="noopener">codebotiks</a></p>
-        </footer>
+            
+            <div class="preview-box">
+                <h2>Squared Image</h2>
+                <div id="squaredPreview" class="preview"></div>
+                <button id="downloadBtn" class="download-btn" style="display: none;">Download Squared Image</button>
+            </div>
+        </div>
+
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+            <p>Processing image...</p>
+        </div>
     </main>
 
     <script>
-        document.getElementById('upload-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const fileInput = document.getElementById('file-input');
-            const file = fileInput.files[0];
-            if (!file) return;
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileName = document.getElementById('fileName');
+            const uploadForm = document.getElementById('uploadForm');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const originalPreview = document.getElementById('originalPreview');
+            const squaredPreview = document.getElementById('squaredPreview');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const dropMessage = document.getElementById('dropMessage');
+            const formatSelect = document.getElementById('formatSelect');
 
-            // Display original image
-            const originalImage = document.getElementById('original-image');
-            originalImage.src = URL.createObjectURL(file);
-            originalImage.style.display = 'block';
+            // Drag and drop handlers
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
 
-            // Create form data and send to server
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('pixel_size', document.getElementById('pixel-size').value);
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
 
-            try {
-                const response = await fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                });
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
 
-                if (response.ok) {
-    
-                    const blob = await response.blob();
-                    const squaredImage = document.getElementById('squared-image');
-                    squaredImage.src = URL.createObjectURL(blob);
-                    squaredImage.style.display = 'block';
-                    // Show download button after image is processed
-                    document.getElementById('download-btn').style.display = 'block';
-                } else {
-                    alert('Error processing image');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error uploading image');
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
             }
+
+            function highlight(e) {
+                dropZone.classList.add('drag-over');
+                dropMessage.style.display = 'flex';
+            }
+
+            function unhighlight(e) {
+                dropZone.classList.remove('drag-over');
+                dropMessage.style.display = 'none';
+            }
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const file = dt.files[0];
+                handleFile(file);
+            }
+
+            // File input handler
+            fileInput.addEventListener('change', function(e) {
+                handleFile(this.files[0]);
+            });
+
+            function handleFile(file) {
+                if (file) {
+                    fileName.textContent = file.name;
+                    displayOriginalPreview(file);
+                }
+            }
+
+            function displayOriginalPreview(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalPreview.style.backgroundImage = `url(${e.target.result})`;
+                    originalPreview.classList.add('has-image');
+                }
+                reader.readAsDataURL(file);
+            }
+
+            // Form submission
+            uploadForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const file = fileInput.files[0];
+                if (!file) {
+                    alert('Please select an image first');
+                    return;
+                }
+
+                loadingOverlay.style.display = 'flex';
+                squaredPreview.style.backgroundImage = '';
+                squaredPreview.classList.remove('has-image');
+                downloadBtn.style.display = 'none';
+
+                const formData = new FormData(this);
+                try {
+                    const response = await fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(await response.text());
+                    }
+
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    
+                    squaredPreview.style.backgroundImage = `url(${url})`;
+                    squaredPreview.classList.add('has-image');
+                    downloadBtn.style.display = 'block';
+                    
+                    // Update download button
+                    downloadBtn.onclick = () => {
+                        const format = formatSelect.value;
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `squared_image.${format}`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
+                } catch (error) {
+                    alert('Error processing image: ' + error.message);
+                } finally {
+                    loadingOverlay.style.display = 'none';
+                }
+            });
         });
-        function downloadImage() {
-        const squaredImage = document.getElementById('squared-image');
-        if (squaredImage.src) {
-        const link = document.createElement('a');
-        link.href = squaredImage.src;
-        link.download = 'squared-image.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-}
     </script>
 </body>
 </html>

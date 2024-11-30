@@ -9,6 +9,25 @@ import sys
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
+def encode_image(image, format='png'):
+    """Encode image to specified format"""
+    if format.lower() == 'png':
+        ext = '.png'
+        params = []
+    elif format.lower() == 'jpeg':
+        ext = '.jpg'
+        params = [cv2.IMWRITE_JPEG_QUALITY, 95]  # High quality JPEG
+    elif format.lower() == 'webp':
+        ext = '.webp'
+        params = [cv2.IMWRITE_WEBP_QUALITY, 95]  # High quality WebP
+    else:
+        raise ValueError(f"Unsupported format: {format}")
+    
+    success, buffer = cv2.imencode(ext, image, params)
+    if not success:
+        raise ValueError(f"Failed to encode image to {format}")
+    return buffer
+
 def square_image(file_stream):
     try:
         # Read the file into memory
@@ -64,11 +83,11 @@ def square_image(file_stream):
         # Convert back to BGR for encoding
         resized = cv2.cvtColor(resized, cv2.COLOR_RGB2BGR)
         
-        # Encode to PNG
-        success, buffer = cv2.imencode('.png', resized)
-        if not success:
-            raise ValueError("Failed to encode output image")
-            
+        # Get output format
+        format = request.form.get('format', 'png')
+        
+        # Encode to specified format
+        buffer = encode_image(resized, format)
         return io.BytesIO(buffer.tobytes())
         
     except Exception as e:
@@ -94,7 +113,11 @@ def upload_file():
         img_io = square_image(file)
         img_io.seek(0)
         
-        return send_file(img_io, mimetype='image/png')
+        # Get the format for the response mimetype
+        format = request.form.get('format', 'png')
+        mimetype = f'image/{format}'
+        
+        return send_file(img_io, mimetype=mimetype)
         
     except Exception as e:
         print(f"Error processing image: {str(e)}", file=sys.stderr)
