@@ -203,20 +203,27 @@ select {
     margin-bottom: 1rem;
     background-color: #222;
     border-radius: 4px;
+    padding: 1rem;
 }
 
 .preview {
+    display: block;
     height: auto;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: -webkit-optimize-contrast; /* Sharper image rendering in Chrome */
-    image-rendering: crisp-edges; /* Sharper image rendering in Firefox */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 #originalPreview {
-    max-width: 100%; /* Original image should still be constrained */
+    max-width: 100%;
     height: auto;
     object-fit: contain;
+}
+
+#squaredPreview {
+    display: block;
+    background-color: transparent;
 }
 
 .download-btn {

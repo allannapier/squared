@@ -157,54 +157,76 @@
                     return;
                 }
 
+                await squareImage(file);
+            });
+
+            async function squareImage(file) {
+                if (!file) {
+                    console.error('No file provided');
+                    return;
+                }
+
+                console.log('Starting image processing...');
                 loadingOverlay.style.display = 'flex';
                 squaredPreview.src = '';
                 downloadBtn.style.display = 'none';
 
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('pixel_size', document.getElementById('pixelSize').value);
-                formData.append('format', formatSelect.value);
-
                 try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    const pixelSize = document.getElementById('pixelSize').value;
+                    console.log('Pixel size:', pixelSize);
+                    formData.append('pixel_size', pixelSize);
+                    
+                    const format = formatSelect.value;
+                    console.log('Format:', format);
+                    formData.append('format', format);
+
+                    console.log('Sending request to server...');
                     const response = await fetch('/upload', {
                         method: 'POST',
                         body: formData
                     });
 
                     if (!response.ok) {
-                        throw new Error(await response.text());
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
 
+                    console.log('Response received, creating blob...');
                     const blob = await response.blob();
+                    console.log('Blob created:', blob.size, 'bytes');
                     const url = URL.createObjectURL(blob);
+                    console.log('URL created:', url);
                     
-                    // Set the image source
-                    squaredPreview.src = url;
-                    
-                    // Set exact dimensions to match the requested pixel size
-                    const pixelSize = document.getElementById('pixelSize').value;
-                    squaredPreview.style.width = `${pixelSize}px`;
-                    squaredPreview.style.height = `${pixelSize}px`;
-                    
-                    downloadBtn.style.display = 'block';
-                    
+                    // Create a new Image object to verify loading
+                    const img = new Image();
+                    img.onload = function() {
+                        console.log('Image loaded successfully:', img.width, 'x', img.height);
+                        squaredPreview.src = url;
+                        squaredPreview.style.width = `${pixelSize}px`;
+                        squaredPreview.style.height = `${pixelSize}px`;
+                        downloadBtn.style.display = 'block';
+                    };
+                    img.onerror = function() {
+                        console.error('Error loading image');
+                    };
+                    img.src = url;
+
                     downloadBtn.onclick = () => {
-                        const format = formatSelect.value;
                         const link = document.createElement('a');
                         link.href = url;
-                        link.download = `squared_image.${format}`;
+                        link.download = `squared_${file.name}`;
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
                     };
                 } catch (error) {
-                    console.error('Error:', error);
-                    alert('Error processing image: ' + error.message);
+                    console.error('Error processing image:', error);
                 } finally {
                     loadingOverlay.style.display = 'none';
                 }
-            });
+            }
         });
     </script>
 </body>
