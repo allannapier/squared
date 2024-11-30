@@ -3,7 +3,7 @@ from PIL import Image
 import io
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 def square_image(image):
@@ -54,10 +54,3 @@ def upload_file():
         return send_file(img_io, mimetype='image/png')
     except Exception as e:
         return str(e), 400
-
-# For local development
-if __name__ == '__main__':
-    app.run(debug=True)
-
-# For Vercel
-app = app
