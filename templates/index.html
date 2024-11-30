@@ -179,7 +179,13 @@
                     const blob = await response.blob();
                     const url = URL.createObjectURL(blob);
                     
+                    // Set the image source
                     squaredPreview.src = url;
+                    
+                    // Set exact dimensions to match the requested pixel size
+                    const pixelSize = document.getElementById('pixelSize').value;
+                    squaredPreview.style.width = `${pixelSize}px`;
+                    squaredPreview.style.height = `${pixelSize}px`;
                     
                     downloadBtn.style.display = 'block';
                     
