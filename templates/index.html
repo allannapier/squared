@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Squarer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Image Squarer</h1>
+        <div class="upload-container">
+            <form id="upload-form">
+                <input type="file" id="file-input" accept="image/*" required>
+                <button type="submit">Square It!</button>
+            </form>
+        </div>
+        <div class="image-container">
+            <div class="image-box">
+                <h3>Original Image</h3>
+                <img id="original-image" src="" alt="Original image will appear here">
+            </div>
+            <div class="image-box">
+                <h3>Squared Image</h3>
+                <img id="squared-image" src="" alt="Squared image will appear here">
+                <button id="download-btn" style="display: none;" onclick="downloadImage()">Download Squared Image</button>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            // Display original image
+            const originalImage = document.getElementById('original-image');
+            originalImage.src = URL.createObjectURL(file);
+
+            // Create form data and send to server
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+    
+                    const blob = await response.blob();
+                    const squaredImage = document.getElementById('squared-image');
+                    squaredImage.src = URL.createObjectURL(blob);
+                    // Show download button after image is processed
+                    document.getElementById('download-btn').style.display = 'block';
+                } else {
+                    alert('Error processing image');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error uploading image');
+            }
+        });
+        function downloadImage() {
+        const squaredImage = document.getElementById('squared-image');
+        if (squaredImage.src) {
+        const link = document.createElement('a');
+        link.href = squaredImage.src;
+        link.download = 'squared-image.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+    </script>
+</body>
+</html>
