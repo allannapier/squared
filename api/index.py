@@ -19,8 +19,8 @@ def square_image(image):
     # Crop the image to a square
     cropped = image.crop((left, top, right, bottom))
     
-    # Get the target size from the request, default to 500
-    target_size = request.form.get('pixel_size', 500, type=int)
+    # Get the target size from the request, default to 300
+    target_size = request.form.get('pixel_size', 300, type=int)
     # Ensure target size is within reasonable bounds
     target_size = max(50, min(target_size, 2000))
     
