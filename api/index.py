@@ -7,14 +7,7 @@ import os
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
-def square_image(file_stream):
-    # Read image file stream into numpy array
-    file_bytes = np.frombuffer(file_stream.read(), np.uint8)
-    # Read image in RGB mode directly
-    image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-    # Convert BGR to RGB right after reading
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    
+def square_image(image):
     # Get the size of the original image
     height, width = image.shape[:2]
     
@@ -34,14 +27,7 @@ def square_image(file_stream):
     target_size = max(50, min(target_size, 2000))
     
     # Resize the image to the target size
-    resized = cv2.resize(cropped, (target_size, target_size), interpolation=cv2.INTER_LANCZOS4)
-    
-    # Convert back to BGR for imencode
-    resized = cv2.cvtColor(resized, cv2.COLOR_RGB2BGR)
-    
-    # Encode the image to PNG
-    _, buffer = cv2.imencode('.png', resized)
-    return io.BytesIO(buffer.tobytes())
+    return cropped.resize((target_size, target_size), Image.Resampling.LANCZOS)
 
 @app.route('/')
 def index():
