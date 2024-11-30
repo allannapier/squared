@@ -29,6 +29,7 @@ h1 {
     text-align: center;
     margin-bottom: 0.5rem;
     font-size: 2.5rem;
+    color: var(--primary-color);
 }
 
 .beta {
@@ -89,18 +90,34 @@ h1 {
     flex-wrap: wrap;
 }
 
+.file-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
 .file-label {
-    background-color: var(--secondary-bg);
+    background-color: var(--primary-color);
+    color: white;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
-    border: 1px solid #444;
-    flex: 1;
-    min-width: 200px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.file-label:hover {
+    background-color: var(--hover-color);
 }
 
 .file-input {
     display: none;
+}
+
+#fileName {
+    color: #cccccc;
+    font-size: 0.9rem;
 }
 
 .size-format-group {
@@ -114,6 +131,11 @@ h1 {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.size-input-group label,
+.format-select-group label {
+    color: var(--primary-color);
 }
 
 input[type="number"] {
@@ -166,6 +188,7 @@ select {
 .preview-box h2 {
     margin-bottom: 1rem;
     font-size: 1.2rem;
+    color: var(--primary-color);
 }
 
 .preview {
@@ -232,7 +255,16 @@ select {
         flex-direction: column;
     }
     
+    .file-group {
+        width: 100%;
+    }
+    
     .size-format-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .square-btn {
         width: 100%;
     }
 }

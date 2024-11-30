@@ -20,10 +20,13 @@
         <div class="upload-container" id="dropZone">
             <form id="uploadForm" class="upload-form">
                 <div class="input-group">
-                    <label for="fileInput" class="file-label">
-                        <span id="fileName">Choose File</span>
-                        <input type="file" id="fileInput" accept="image/*" class="file-input">
-                    </label>
+                    <div class="file-group">
+                        <label for="fileInput" class="file-label">
+                            Choose File
+                            <input type="file" id="fileInput" name="file" accept="image/*" class="file-input">
+                        </label>
+                        <span id="fileName">No file chosen</span>
+                    </div>
                     
                     <div class="size-format-group">
                         <div class="size-input-group">
@@ -117,19 +120,21 @@
             function handleDrop(e) {
                 const dt = e.dataTransfer;
                 const file = dt.files[0];
-                handleFile(file);
+                if (file && file.type.startsWith('image/')) {
+                    fileInput.files = dt.files;
+                    handleFile(file);
+                }
             }
 
-            // File input handler
             fileInput.addEventListener('change', function(e) {
-                handleFile(this.files[0]);
+                if (this.files[0]) {
+                    handleFile(this.files[0]);
+                }
             });
 
             function handleFile(file) {
-                if (file) {
-                    fileName.textContent = file.name;
-                    displayOriginalPreview(file);
-                }
+                fileName.textContent = file.name;
+                displayOriginalPreview(file);
             }
 
             function displayOriginalPreview(file) {
@@ -141,7 +146,6 @@
                 reader.readAsDataURL(file);
             }
 
-            // Form submission
             uploadForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
@@ -156,7 +160,11 @@
                 squaredPreview.classList.remove('has-image');
                 downloadBtn.style.display = 'none';
 
-                const formData = new FormData(this);
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('pixel_size', document.getElementById('pixelSize').value);
+                formData.append('format', formatSelect.value);
+
                 try {
                     const response = await fetch('/upload', {
                         method: 'POST',
@@ -174,7 +182,6 @@
                     squaredPreview.classList.add('has-image');
                     downloadBtn.style.display = 'block';
                     
-                    // Update download button
                     downloadBtn.onclick = () => {
                         const format = formatSelect.value;
                         const link = document.createElement('a');
@@ -185,6 +192,7 @@
                         document.body.removeChild(link);
                     };
                 } catch (error) {
+                    console.error('Error:', error);
                     alert('Error processing image: ' + error.message);
                 } finally {
                     loadingOverlay.style.display = 'none';
