@@ -55,5 +55,9 @@ def upload_file():
     except Exception as e:
         return str(e), 400
 
+# For local development
 if __name__ == '__main__':
     app.run(debug=True)
+
+# For Vercel
+app = app
