@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Image Squarer</title>
+    <title>Squared BETA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Image Squarer</h1>
+        <h1>Squared <span class="beta">BETA</span></h1>
+        <p class="description">Squared lets you resize an image to an exact square, great for profile pictures</p>
         <div class="upload-container">
             <form id="upload-form">
                 <input type="file" id="file-input" accept="image/*" required>
+                <div class="input-group">
+                    <label for="pixel-size">Output Size:</label>
+                    <input type="number" id="pixel-size" placeholder="Square size in pixels" value="500" min="50" max="2000" required>
+                </div>
                 <button type="submit">Square It!</button>
             </form>
         </div>
         <div class="image-container">
             <div class="image-box">
                 <h3>Original Image</h3>
-                <img id="original-image" src="" alt="Original image will appear here">
+                <img id="original-image" src="" alt="" style="display: none;">
             </div>
             <div class="image-box">
                 <h3>Squared Image</h3>
-                <img id="squared-image" src="" alt="Squared image will appear here">
+                <img id="squared-image" src="" alt="" style="display: none;">
                 <button id="download-btn" style="display: none;" onclick="downloadImage()">Download Squared Image</button>
 
             </div>
         </div>
+        <footer class="footer">
+            <p>developed by <a href="https://www.codebotiks.com" target="_blank">codebotiks</a></p>
+        </footer>
     </div>
 
     <script>
@@ -38,10 +46,12 @@
             // Display original image
             const originalImage = document.getElementById('original-image');
             originalImage.src = URL.createObjectURL(file);
+            originalImage.style.display = 'block';
 
             // Create form data and send to server
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('pixel_size', document.getElementById('pixel-size').value);
 
             try {
                 const response = await fetch('/upload', {
@@ -54,6 +64,7 @@
                     const blob = await response.blob();
                     const squaredImage = document.getElementById('squared-image');
                     squaredImage.src = URL.createObjectURL(blob);
+                    squaredImage.style.display = 'block';
                     // Show download button after image is processed
                     document.getElementById('download-btn').style.display = 'block';
                 } else {

@@ -10,14 +10,22 @@ def square_image(image):
     # Get the size of the original image
     width, height = image.size
     # Use the smaller dimension to create a square
-    size = min(width, height)
+    crop_size = min(width, height)
     # Calculate coordinates for cropping
-    left = (width - size) // 2
-    top = (height - size) // 2
-    right = left + size
-    bottom = top + size
+    left = (width - crop_size) // 2
+    top = (height - crop_size) // 2
+    right = left + crop_size
+    bottom = top + crop_size
     # Crop the image to a square
-    return image.crop((left, top, right, bottom))
+    cropped = image.crop((left, top, right, bottom))
+    
+    # Get the target size from the request, default to 500
+    target_size = request.form.get('pixel_size', 500, type=int)
+    # Ensure target size is within reasonable bounds
+    target_size = max(50, min(target_size, 2000))
+    
+    # Resize the image to the target size
+    return cropped.resize((target_size, target_size), Image.Resampling.LANCZOS)
 
 @app.route('/')
 def index():
@@ -48,4 +56,4 @@ def upload_file():
         return str(e), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)# Initialize a new Poetry project
+    app.run(debug=True)

@@ -2,7 +2,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f0f2f5;
+    background-color: #1a1a1a;
+    color: #ffffff;
 }
 
 .container {
@@ -12,16 +13,36 @@ body {
 
 h1 {
     text-align: center;
-    color: #1a73e8;
+    color: #ff6b2b;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+}
+
+.beta {
+    font-size: 0.4em;
+    vertical-align: super;
+    color: #ff824f;
+    font-weight: normal;
+    letter-spacing: 1px;
+}
+
+.description {
+    text-align: center;
+    color: #999;
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .upload-container {
     text-align: center;
     margin: 20px 0;
     padding: 20px;
-    background-color: white;
+    background-color: #2d2d2d;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .image-container {
@@ -33,50 +54,100 @@ h1 {
 
 .image-box {
     flex: 1;
-    background-color: white;
+    background-color: #2d2d2d;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .image-box h3 {
     text-align: center;
     margin-top: 0;
-    color: #1a73e8;
+    margin-bottom: 20px;
+    color: #ff6b2b;
 }
 
 img {
     max-width: 100%;
     max-height: 400px;
-    display: block;
+    display: none;
     margin: 0 auto;
 }
 
+.input-group {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.input-group label {
+    margin-right: 8px;
+    color: #ff6b2b;
+    font-weight: 500;
+}
+
+input[type="file"] {
+    padding: 10px;
+    background-color: #3d3d3d;
+    border: 1px solid #4d4d4d;
+    border-radius: 4px;
+    color: #ffffff;
+}
+
+input[type="number"] {
+    width: 100px;
+    padding: 8px;
+    background-color: #3d3d3d;
+    border: 1px solid #4d4d4d;
+    border-radius: 4px;
+    color: #ffffff;
+}
+
 button {
-    background-color: #1a73e8;
+    background-color: #ff6b2b;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
     margin-left: 10px;
+    transition: background-color 0.2s;
 }
 
 button:hover {
-    background-color: #1557b0;
+    background-color: #ff824f;
 }
 
-input[type="file"] {
-    padding: 10px;
-}
 #download-btn {
     display: block;
     margin: 10px auto;
-    background-color: #34a853;
+    background-color: #ff6b2b;
     margin-left: auto;
     margin-right: auto;
 }
 
 #download-btn:hover {
-    background-color: #2d8e47;
+    background-color: #ff824f;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.footer a {
+    color: #ff6b2b;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer a:hover {
+    color: #ff824f;
 }
