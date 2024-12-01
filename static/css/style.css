@@ -289,78 +289,74 @@ select {
 .modal {
     display: none;
     position: fixed;
+    inset: 0;
     z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(5px);
-    overflow: hidden;
 }
 
 .modal-content {
-    background-color: #1a1a1a;
-    margin: 5vh auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #1a1a1a;
     padding: 2rem;
-    border: 1px solid #333;
     border-radius: 8px;
     width: 90%;
     max-width: 600px;
-    position: relative;
-    color: #fff;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid #333;
 }
 
 .modal-content h2 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    padding-right: 2rem;
     color: #fff;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-right: 2rem;
 }
 
 .modal-content p {
-    margin-bottom: 1rem;
-    line-height: 1.5;
     color: #ccc;
+    margin-bottom: 1rem;
+    line-height: 1.6;
 }
 
 .modal-content ul {
-    margin-bottom: 1rem;
-    padding-left: 1.5rem;
     color: #ccc;
+    margin: 1rem 0;
+    padding-left: 1.5rem;
 }
 
 .modal-content li {
-    margin-bottom: 0.5rem;
-    line-height: 1.5;
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
 }
 
 .modal-close {
     position: absolute;
     right: 1rem;
     top: 1rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #fff;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    background-color: transparent;
+    font-size: 1.5rem;
+    color: #fff;
+    background: transparent;
     border: none;
-    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.2s ease;
 }
 
 .modal-close:hover {
     opacity: 1;
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 footer {
