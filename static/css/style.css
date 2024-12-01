@@ -290,12 +290,16 @@ footer {
     padding: 2rem;
     color: #888;
     font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
 }
 
 footer a {
     color: var(--primary-color);
     text-decoration: none;
-    transition: color 0.2s;
+    font-weight: 500;
 }
 
 footer a:hover {
