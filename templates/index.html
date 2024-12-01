@@ -60,13 +60,13 @@
             <div class="preview-box">
                 <h2>Original Image</h2>
                 <div class="preview-wrapper">
-                    <img id="originalPreview" alt="Original image preview" class="preview-image">
+                    <img id="originalPreview" class="preview-image" data-alt="Original image preview">
                 </div>
             </div>
             <div class="preview-box">
                 <h2>Squared Image</h2>
                 <div class="preview-wrapper">
-                    <img id="squaredPreview" alt="Squared image preview" class="preview-image">
+                    <img id="squaredPreview" class="preview-image" data-alt="Squared image preview">
                 </div>
                 <button class="download-btn" id="downloadBtn" style="display: none;">Download</button>
             </div>
@@ -150,6 +150,7 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     originalPreview.src = e.target.result;
+                    originalPreview.alt = originalPreview.dataset.alt;
                 }
                 reader.readAsDataURL(file);
             }
@@ -216,6 +217,7 @@
                             // Set dimensions after image has loaded
                             squaredPreview.style.width = `${pixelSize}px`;
                             squaredPreview.style.height = `${pixelSize}px`;
+                            squaredPreview.alt = squaredPreview.dataset.alt;
                             downloadBtn.style.display = 'block';
                             resolve();
                         };
