@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy & Data Disclaimer - Squared</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+</head>
+<body>
+    <main class="disclaimer-page">
+        <div class="logo-container">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='logo.svg') }}" alt="Squared Logo" class="logo">
+            </a>
+        </div>
+
+        <div class="disclaimer-content">
+            <h1>Privacy & Data Disclaimer</h1>
+            <p>At Squared, we take your privacy seriously. Here's what you should know about how we handle your data:</p>
+            <ul>
+                <li>We do not store any images processed through our service. All images are processed in-memory and are automatically deleted once your session ends.</li>
+                <li>We do not collect or store any personal information.</li>
+                <li>We do not use cookies or any other tracking mechanisms.</li>
+                <li>All image processing is done on our secure servers and the results are immediately sent back to your browser.</li>
+                <li>We use error monitoring services to improve our application, but these do not collect any personal data or image content.</li>
+            </ul>
+            <p>By using Squared, you acknowledge and agree to these terms.</p>
+            <div class="back-link">
+                <a href="/">← Back to Squared</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

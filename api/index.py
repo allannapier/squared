@@ -128,8 +128,12 @@ def square_image(file_stream):
         raise
 
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
+
+@app.route('/disclaimer')
+def disclaimer():
+    return render_template('disclaimer.html')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():

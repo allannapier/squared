@@ -285,6 +285,73 @@ select {
     100% { transform: rotate(360deg); }
 }
 
+/* Disclaimer page styles */
+.disclaimer-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.logo {
+    height: 40px;
+    transition: opacity 0.2s;
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+
+.disclaimer-content {
+    background: #1a1a1a;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.disclaimer-content h1 {
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.disclaimer-content p {
+    color: #ccc;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.disclaimer-content ul {
+    color: #ccc;
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.disclaimer-content li {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.back-link {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.back-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.back-link a:hover {
+    color: var(--hover-color);
+}
+
 /* Modal styles */
 .modal {
     display: none;
