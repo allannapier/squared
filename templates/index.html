@@ -86,11 +86,15 @@
         <script>
             // Modal functions
             function showDisclaimer() {
-                document.getElementById('disclaimerModal').style.display = 'block';
+                const modal = document.getElementById('disclaimerModal');
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
             }
 
             function hideDisclaimer() {
-                document.getElementById('disclaimerModal').style.display = 'none';
+                const modal = document.getElementById('disclaimerModal');
+                modal.style.display = 'none';
+                document.body.style.overflow = ''; // Restore scrolling
             }
 
             // Close modal when clicking outside

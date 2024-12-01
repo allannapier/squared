@@ -289,24 +289,26 @@ select {
 .modal {
     display: none;
     position: fixed;
-    inset: 0;
-    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(5px);
+    z-index: 9999;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .modal-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
     background: #1a1a1a;
+    margin: 50px auto;
     padding: 2rem;
     border-radius: 8px;
     width: 90%;
     max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     border: 1px solid #333;
 }
@@ -352,6 +354,7 @@ select {
     cursor: pointer;
     opacity: 0.7;
     transition: all 0.2s ease;
+    padding: 0;
 }
 
 .modal-close:hover {
