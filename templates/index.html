@@ -61,12 +61,14 @@
                 <h2>Original Image</h2>
                 <div class="preview-wrapper">
                     <img id="originalPreview" alt="Original image preview">
+                    <button class="close-btn" onclick="clearPreview('original')">&times;</button>
                 </div>
             </div>
             <div class="preview-box">
                 <h2>Squared Image</h2>
                 <div class="preview-wrapper">
                     <img id="squaredPreview" alt="Squared image preview">
+                    <button class="close-btn" onclick="clearPreview('squared')">&times;</button>
                 </div>
                 <button class="download-btn" id="downloadBtn" style="display: none;">Download</button>
             </div>
@@ -225,6 +227,15 @@
                     console.error('Error processing image:', error);
                 } finally {
                     loadingOverlay.style.display = 'none';
+                }
+            }
+
+            function clearPreview(type) {
+                if (type === 'original') {
+                    document.getElementById('originalPreview').src = '';
+                } else {
+                    document.getElementById('squaredPreview').src = '';
+                    document.getElementById('downloadBtn').style.display = 'none';
                 }
             }
         });
