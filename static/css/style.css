@@ -297,9 +297,25 @@ footer {
 }
 
 footer a {
-    color: var(--primary-color);
     text-decoration: none;
     font-weight: 500;
+}
+
+footer a .code {
+    color: #ffffff;
+}
+
+footer a .botiks {
+    color: #0066ff;
+}
+
+footer a:hover .code,
+footer a:hover .botiks {
+    opacity: 0.9;
+}
+
+footer a {
+    color: var(--primary-color);
 }
 
 footer a:hover {
