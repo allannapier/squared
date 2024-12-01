@@ -206,24 +206,20 @@ select {
     padding: 1rem;
 }
 
-.preview {
-    display: block;
-    height: auto;
-    background-position: center;
-    background-repeat: no-repeat;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-}
-
 #originalPreview {
+    display: block;
     max-width: 100%;
     height: auto;
     object-fit: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 #squaredPreview {
     display: block;
     background-color: transparent;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .download-btn {
