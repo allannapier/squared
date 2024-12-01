@@ -1,3 +1,4 @@
+import sentry_sdk
 from flask import Flask, render_template, request, send_file
 import cv2
 import numpy as np
@@ -5,6 +6,19 @@ import io
 import os
 import traceback
 import sys
+
+# Initialize Sentry
+sentry_sdk.init(
+    dsn="https://72abe17308dbee6e9186461079178adf@o4506175218253824.ingest.us.sentry.io/4508391974174720",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    _experiments={
+        # Set continuous_profiling_auto_start to True
+        # to automatically start the profiler when possible.
+        "continuous_profiling_auto_start": True,
+    },
+)
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
