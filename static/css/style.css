@@ -285,6 +285,46 @@ select {
     100% { transform: rotate(360deg); }
 }
 
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: var(--bg-color);
+    margin: 15% auto;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+    color: var(--text-color);
+}
+
+.modal-close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.modal-close:hover {
+    opacity: 1;
+}
+
 footer {
     text-align: center;
     padding: 2rem;
@@ -293,7 +333,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.3rem;
+    gap: 1rem;
 }
 
 footer a {
@@ -301,17 +341,18 @@ footer a {
     font-weight: 500;
 }
 
-footer a .code {
-    color: #ffffff;
+footer .separator {
+    color: #888;
 }
 
-footer a .botiks {
-    color: #0066ff;
+footer .disclaimer-link {
+    color: #888;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-footer a:hover .code,
-footer a:hover .botiks {
-    opacity: 0.9;
+footer .disclaimer-link:hover {
+    text-decoration: underline;
 }
 
 footer a {

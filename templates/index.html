@@ -74,185 +74,220 @@
 
         <footer>
             powered by&nbsp;<a href="https://www.codebotiks.com" target="_blank" rel="noopener"><span class="code">Code</span><span class="botiks">botiks</span></a>
+            <span class="separator">|</span>
+            <span class="disclaimer-link" onclick="showDisclaimer()">Disclaimer</span>
         </footer>
 
         <div id="loadingOverlay" class="loading-overlay">
-            <div class="spinner"></div>
-            <p>Processing image...</p>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Processing...</div>
         </div>
-    </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dropZone = document.getElementById('dropZone');
-            const fileInput = document.getElementById('fileInput');
-            const fileName = document.getElementById('fileName');
-            const uploadForm = document.getElementById('uploadForm');
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const originalPreview = document.getElementById('originalPreview');
-            const squaredPreview = document.getElementById('squaredPreview');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const dropMessage = document.getElementById('dropMessage');
-            const formatSelect = document.getElementById('formatSelect');
+        <!-- Disclaimer Modal -->
+        <div id="disclaimerModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" onclick="hideDisclaimer()">&times;</span>
+                <h2>Privacy & Data Disclaimer</h2>
+                <p>At Squared, we take your privacy seriously. Here's what you should know about how we handle your data:</p>
+                <ul>
+                    <li>We do not store any images processed through our service. All images are processed in-memory and are automatically deleted once your session ends.</li>
+                    <li>We do not collect or store any personal information.</li>
+                    <li>We do not use cookies or any other tracking mechanisms.</li>
+                    <li>All image processing is done on our secure servers and the results are immediately sent back to your browser.</li>
+                    <li>We use error monitoring services to improve our application, but these do not collect any personal data or image content.</li>
+                </ul>
+                <p>By using Squared, you acknowledge and agree to these terms.</p>
+            </div>
+        </div>
 
-            // Drag and drop handlers
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, preventDefaults, false);
-                document.body.addEventListener(eventName, preventDefaults, false);
-            });
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const dropZone = document.getElementById('dropZone');
+                const fileInput = document.getElementById('fileInput');
+                const fileName = document.getElementById('fileName');
+                const uploadForm = document.getElementById('uploadForm');
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                const originalPreview = document.getElementById('originalPreview');
+                const squaredPreview = document.getElementById('squaredPreview');
+                const downloadBtn = document.getElementById('downloadBtn');
+                const dropMessage = document.getElementById('dropMessage');
+                const formatSelect = document.getElementById('formatSelect');
 
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropZone.addEventListener(eventName, highlight, false);
-            });
+                // Drag and drop handlers
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, preventDefaults, false);
+                    document.body.addEventListener(eventName, preventDefaults, false);
+                });
 
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, unhighlight, false);
-            });
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, highlight, false);
+                });
 
-            dropZone.addEventListener('drop', handleDrop, false);
+                ['dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, unhighlight, false);
+                });
 
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
+                dropZone.addEventListener('drop', handleDrop, false);
 
-            function highlight(e) {
-                dropZone.classList.add('drag-over');
-                dropMessage.style.display = 'flex';
-            }
-
-            function unhighlight(e) {
-                dropZone.classList.remove('drag-over');
-                dropMessage.style.display = 'none';
-            }
-
-            function handleDrop(e) {
-                const dt = e.dataTransfer;
-                const file = dt.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    fileInput.files = dt.files;
-                    handleFile(file);
-                }
-            }
-
-            fileInput.addEventListener('change', function(e) {
-                if (this.files[0]) {
-                    handleFile(this.files[0]);
-                }
-            });
-
-            function handleFile(file) {
-                fileName.textContent = file.name;
-                displayOriginalPreview(file);
-            }
-
-            function displayOriginalPreview(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    originalPreview.src = e.target.result;
-                    originalPreview.alt = originalPreview.dataset.alt;
-                }
-                reader.readAsDataURL(file);
-            }
-
-            uploadForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const file = fileInput.files[0];
-                if (!file) {
-                    alert('Please select an image first');
-                    return;
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
 
-                await squareImage(file);
-            });
-
-            async function squareImage(file) {
-                if (!file) {
-                    console.error('No file provided');
-                    return;
+                function highlight(e) {
+                    dropZone.classList.add('drag-over');
+                    dropMessage.style.display = 'flex';
                 }
 
-                console.log('Starting image processing...');
-                loadingOverlay.style.display = 'flex';
-                squaredPreview.src = '';
-                downloadBtn.style.display = 'none';
+                function unhighlight(e) {
+                    dropZone.classList.remove('drag-over');
+                    dropMessage.style.display = 'none';
+                }
 
-                try {
-                    const formData = new FormData();
-                    formData.append('file', file);
+                function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const file = dt.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        fileInput.files = dt.files;
+                        handleFile(file);
+                    }
+                }
+
+                fileInput.addEventListener('change', function(e) {
+                    if (this.files[0]) {
+                        handleFile(this.files[0]);
+                    }
+                });
+
+                function handleFile(file) {
+                    fileName.textContent = file.name;
+                    displayOriginalPreview(file);
+                }
+
+                function displayOriginalPreview(file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        originalPreview.src = e.target.result;
+                        originalPreview.alt = originalPreview.dataset.alt;
+                    }
+                    reader.readAsDataURL(file);
+                }
+
+                uploadForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
                     
-                    const pixelSize = document.getElementById('pixelSize').value;
-                    console.log('Pixel size:', pixelSize);
-                    formData.append('pixel_size', pixelSize);
-                    
-                    const format = formatSelect.value;
-                    console.log('Format:', format);
-                    formData.append('format', format);
-
-                    console.log('Sending request to server...');
-                    const response = await fetch('/upload', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                    const file = fileInput.files[0];
+                    if (!file) {
+                        alert('Please select an image first');
+                        return;
                     }
 
-                    console.log('Response received, creating blob...');
-                    const blob = await response.blob();
-                    console.log('Blob created:', blob.size, 'bytes');
-                    const url = URL.createObjectURL(blob);
-                    console.log('URL created:', url);
-                    
-                    // Reset the preview dimensions
-                    squaredPreview.style.width = '';
-                    squaredPreview.style.height = '';
-                    
-                    // Set the source and wait for load
-                    await new Promise((resolve, reject) => {
-                        squaredPreview.onload = () => {
-                            console.log('Image loaded, setting dimensions...');
-                            // Set dimensions after image has loaded
-                            squaredPreview.style.width = `${pixelSize}px`;
-                            squaredPreview.style.height = `${pixelSize}px`;
-                            squaredPreview.alt = squaredPreview.dataset.alt;
-                            downloadBtn.style.display = 'block';
-                            resolve();
-                        };
-                        squaredPreview.onerror = (e) => {
-                            console.error('Error loading image:', e);
-                            reject(new Error('Failed to load image'));
-                        };
-                        squaredPreview.src = url;
-                    });
+                    await squareImage(file);
+                });
 
-                    // Set up download button
-                    downloadBtn.onclick = () => {
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.download = `squared_${file.name}`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    };
-                } catch (error) {
-                    console.error('Error processing image:', error);
-                } finally {
-                    loadingOverlay.style.display = 'none';
-                }
-            }
+                async function squareImage(file) {
+                    if (!file) {
+                        console.error('No file provided');
+                        return;
+                    }
 
-            function clearPreview(type) {
-                if (type === 'original') {
-                    document.getElementById('originalPreview').src = '';
-                } else {
-                    document.getElementById('squaredPreview').src = '';
-                    document.getElementById('downloadBtn').style.display = 'none';
+                    console.log('Starting image processing...');
+                    loadingOverlay.style.display = 'flex';
+                    squaredPreview.src = '';
+                    downloadBtn.style.display = 'none';
+
+                    try {
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        
+                        const pixelSize = document.getElementById('pixelSize').value;
+                        console.log('Pixel size:', pixelSize);
+                        formData.append('pixel_size', pixelSize);
+                        
+                        const format = formatSelect.value;
+                        console.log('Format:', format);
+                        formData.append('format', format);
+
+                        console.log('Sending request to server...');
+                        const response = await fetch('/upload', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        console.log('Response received, creating blob...');
+                        const blob = await response.blob();
+                        console.log('Blob created:', blob.size, 'bytes');
+                        const url = URL.createObjectURL(blob);
+                        console.log('URL created:', url);
+                        
+                        // Reset the preview dimensions
+                        squaredPreview.style.width = '';
+                        squaredPreview.style.height = '';
+                        
+                        // Set the source and wait for load
+                        await new Promise((resolve, reject) => {
+                            squaredPreview.onload = () => {
+                                console.log('Image loaded, setting dimensions...');
+                                // Set dimensions after image has loaded
+                                squaredPreview.style.width = `${pixelSize}px`;
+                                squaredPreview.style.height = `${pixelSize}px`;
+                                squaredPreview.alt = squaredPreview.dataset.alt;
+                                downloadBtn.style.display = 'block';
+                                resolve();
+                            };
+                            squaredPreview.onerror = (e) => {
+                                console.error('Error loading image:', e);
+                                reject(new Error('Failed to load image'));
+                            };
+                            squaredPreview.src = url;
+                        });
+
+                        // Set up download button
+                        downloadBtn.onclick = () => {
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = `squared_${file.name}`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        };
+                    } catch (error) {
+                        console.error('Error processing image:', error);
+                    } finally {
+                        loadingOverlay.style.display = 'none';
+                    }
                 }
-            }
-        });
-    </script>
+
+                function clearPreview(type) {
+                    if (type === 'original') {
+                        document.getElementById('originalPreview').src = '';
+                    } else {
+                        document.getElementById('squaredPreview').src = '';
+                        document.getElementById('downloadBtn').style.display = 'none';
+                    }
+                }
+
+                function showDisclaimer() {
+                    document.getElementById('disclaimerModal').style.display = 'block';
+                }
+
+                function hideDisclaimer() {
+                    document.getElementById('disclaimerModal').style.display = 'none';
+                }
+
+                // Close modal when clicking outside of it
+                window.onclick = function(event) {
+                    const modal = document.getElementById('disclaimerModal');
+                    if (event.target === modal) {
+                        hideDisclaimer();
+                    }
+                }
+            });
+        </script>
+    </main>
 </body>
 </html>
