@@ -11,12 +11,12 @@
     <main class="disclaimer-page">
         <div class="logo-container">
             <a href="/" class="logo-link">
-                <img src="{{ url_for('static', filename='logo.svg') }}" alt="Squared Logo" class="logo">
+                <h1 class="logo-text">Squared</h1>
             </a>
         </div>
 
         <div class="disclaimer-content">
-            <h1>Privacy & Data Disclaimer</h1>
+            <h2>Privacy & Data Disclaimer</h2>
             <p>At Squared, we take your privacy seriously. Here's what you should know about how we handle your data:</p>
             <ul>
                 <li>We do not store any images processed through our service. All images are processed in-memory and are automatically deleted once your session ends.</li>
@@ -25,7 +25,12 @@
                 <li>All image processing is done on our secure servers and the results are immediately sent back to your browser.</li>
                 <li>We use error monitoring services to improve our application, but these do not collect any personal data or image content.</li>
             </ul>
-            <p>By using Squared, you acknowledge and agree to these terms.</p>
+
+            <h3>Advertising</h3>
+            <p>To keep Squared free and accessible to everyone, we use advertisements to generate revenue. These ads may appear on the site while you use our service. We work with trusted advertising partners to ensure ads are appropriate and non-intrusive.</p>
+
+            <p class="agreement">By using Squared, you acknowledge and agree to these terms.</p>
+            
             <div class="back-link">
                 <a href="/">← Back to Squared</a>
             </div>

@@ -297,48 +297,73 @@ select {
     margin-bottom: 3rem;
 }
 
-.logo {
-    height: 40px;
+.logo-text {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin: 0;
     transition: opacity 0.2s;
 }
 
-.logo:hover {
+.logo-link {
+    text-decoration: none;
+}
+
+.logo-link:hover .logo-text {
     opacity: 0.8;
 }
 
 .disclaimer-content {
     background: #1a1a1a;
-    padding: 2rem;
+    padding: 2.5rem;
     border-radius: 8px;
     border: 1px solid #333;
+    text-align: center;
 }
 
-.disclaimer-content h1 {
+.disclaimer-content h2 {
     color: #fff;
     margin-top: 0;
     margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.disclaimer-content h3 {
+    color: #fff;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
 }
 
 .disclaimer-content p {
     color: #ccc;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .disclaimer-content ul {
     color: #ccc;
-    margin: 1rem 0;
-    padding-left: 1.5rem;
+    margin: 1.5rem auto;
+    padding-left: 0;
+    list-style-position: inside;
+    max-width: 600px;
+    text-align: left;
 }
 
 .disclaimer-content li {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     line-height: 1.6;
 }
 
-.back-link {
+.agreement {
     margin-top: 2rem;
-    text-align: center;
+    font-weight: 500;
+}
+
+.back-link {
+    margin-top: 2.5rem;
 }
 
 .back-link a {
@@ -346,6 +371,7 @@ select {
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
+    font-size: 1.1rem;
 }
 
 .back-link a:hover {
